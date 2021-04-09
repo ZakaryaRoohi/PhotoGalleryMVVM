@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +20,7 @@ import org.maktab.photogallery.adapters.PhotoAdapter;
 import org.maktab.photogallery.databinding.FragmentPhotoGalleryBinding;
 import org.maktab.photogallery.model.GalleryItem;
 import org.maktab.photogallery.repository.PhotoRepository;
+import org.maktab.photogallery.viewModel.PhotoGalleryViewModel;
 
 import java.util.List;
 
@@ -36,7 +38,8 @@ public class PhotoGalleryFragment extends Fragment {
 
     private PhotoAdapter mAdapter;
 
-    private PhotoRepository mRepository;
+    //    private PhotoRepository mRepository;
+    PhotoGalleryViewModel mViewModel;
 
     public PhotoGalleryFragment() {
         // Required empty public constructor
@@ -52,19 +55,19 @@ public class PhotoGalleryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRepository = PhotoRepository.getInstance();
+        mViewModel = new ViewModelProvider(this,null)
+                .get(PhotoGalleryViewModel.class);
 
-        mRepository.setListeners(new PhotoRepository.Listeners() {
-            @Override
-            public void onRetrofitResponse(List<GalleryItem> items) {
-                setupAdapter(items);
-            }
-        });
+//        mRepository = PhotoRepository.getInstance();
+//        mRepository.setListeners(new PhotoRepository.Listeners() {
+//            @Override
+//            public void onRetrofitResponse(List<GalleryItem> items) {
+//                setupAdapter(items);
+//            }
+//        });
 
-        mRepository.getItemsAsync();
+//        mRepository.getItemsAsync();
 
-        /*FetchItemTasks fetchItemTasks = new FetchItemTasks();
-        fetchItemTasks.execute();*/
     }
 
     @Override
@@ -94,8 +97,8 @@ public class PhotoGalleryFragment extends Fragment {
     }
 
     private void setupAdapter(List<GalleryItem> items) {
-        mAdapter = new PhotoAdapter(getContext(),items);
-       mFragmentPhotoGalleryBinding.photoGalleryRecyclerview.setAdapter(mAdapter);
+        mAdapter = new PhotoAdapter(getContext(), items);
+        mFragmentPhotoGalleryBinding.photoGalleryRecyclerview.setAdapter(mAdapter);
     }
 
 
